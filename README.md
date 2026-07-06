@@ -103,8 +103,10 @@ AI Investment/
 │   │   │   ├── newsData.js                # Tavily search client
 │   │   │   ├── tickerLookup.js            # Finnhub lookup client
 │   │   │   └── cache.js                   # Report cache manager
+│   │   ├── controllers/
+│   │   │   └── researchController.js      # Controller handling Express route logic
 │   │   ├── routes/
-│   │   │   └── research.js                # Express router (POST / & GET /stream)
+│   │   │   └── research.js                # Express routes (only maps endpoints to controllers)
 │   │   └── index.js                       # Server entrypoint & middlewares
 │   ├── .env.example
 │   └── package.json
