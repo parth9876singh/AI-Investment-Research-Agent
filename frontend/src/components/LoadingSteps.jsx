@@ -49,7 +49,7 @@ export default function LoadingSteps({ companyName, onComplete, onError }) {
       synthesizeDecision: "idle",
     });
 
-    const streamUrl = `${API_BASE_URL}api/research/stream?companyName=${encodeURIComponent(companyName)}`;
+    const streamUrl = `${API_BASE_URL}/api/research/stream?companyName=${encodeURIComponent(companyName)}`;
     console.log(`[LoadingSteps] Connecting to SSE: ${streamUrl}`);
 
     const es = new EventSource(streamUrl);
