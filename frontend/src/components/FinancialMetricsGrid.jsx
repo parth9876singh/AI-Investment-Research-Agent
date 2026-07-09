@@ -60,7 +60,7 @@ export default function FinancialMetricsGrid({ financialData }) {
   const changeSign = isPositiveChange ? "+" : "";
 
   return (
-    <div className="w-full bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-2xl hover:border-slate-700/60 transition-all duration-300 animate-fade-in-up">
+    <div className="w-full bg-slate-950/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 md:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-white/20 transition-all duration-300 animate-fade-in-up">
       {/* Title */}
       <div className="flex items-center justify-between border-b border-slate-800/60 pb-4 mb-6">
         <div className="flex items-center gap-2.5">
@@ -86,7 +86,7 @@ export default function FinancialMetricsGrid({ financialData }) {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         
         {/* Metric 1: Stock Price */}
-        <div className="bg-slate-950/50 border border-slate-800/60 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700/40 transition-colors duration-200">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Share Price</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -101,7 +101,7 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 2: Market Cap */}
-        <div className="bg-slate-950/50 border border-slate-800/60 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700/40 transition-colors duration-200">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Market Cap</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -114,7 +114,7 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 3: Return on Equity (ROE) */}
-        <div className="bg-slate-950/50 border border-slate-800/60 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700/40 transition-colors duration-200">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Return on Equity (ROE)</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -127,7 +127,7 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 4: Return on Assets (ROA) */}
-        <div className="bg-slate-950/50 border border-slate-800/60 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700/40 transition-colors duration-200">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Return on Assets (ROA)</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -140,7 +140,7 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 5: Volatility (Beta) */}
-        <div className="bg-slate-950/50 border border-slate-800/60 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700/40 transition-colors duration-200">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Volatility (Beta)</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -153,7 +153,7 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 6: Valuation Indicators */}
-        <div className="bg-slate-950/50 border border-slate-800/60 rounded-xl p-4 flex flex-col justify-between hover:border-slate-700/40 transition-colors duration-200">
+        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Valuation Multiple</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">

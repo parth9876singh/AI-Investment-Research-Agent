@@ -12,7 +12,7 @@ export default function KeyFactorsList({ keyFactors }) {
   if (!keyFactors || !Array.isArray(keyFactors) || keyFactors.length === 0) return null;
 
   return (
-    <div className="w-full bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-2xl p-6 shadow-xl hover:border-slate-700/60 transition-all duration-300">
+    <div className="w-full bg-slate-950/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-white/20 transition-all duration-300">
       <div className="flex items-center gap-2.5 mb-4">
         <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
@@ -29,7 +29,7 @@ export default function KeyFactorsList({ keyFactors }) {
             className="flex items-start gap-3 group text-sm text-slate-200 transition-colors duration-200"
           >
             {/* Custom Bullet Indicator */}
-            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-slate-950 border border-slate-800 text-[10px] font-mono text-indigo-400 font-bold group-hover:border-indigo-500/30 group-hover:bg-indigo-950/20 transition-all duration-300 mt-0.5 shrink-0">
+            <span className="flex items-center justify-center w-5 h-5 rounded-full bg-white/5 border border-white/10 text-[10px] font-mono text-indigo-400 font-bold group-hover:border-indigo-500/30 group-hover:bg-indigo-950/20 transition-all duration-300 mt-0.5 shrink-0">
               {index + 1}
             </span>
             <span className="leading-relaxed font-normal">

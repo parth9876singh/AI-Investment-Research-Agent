@@ -30,7 +30,7 @@ export default function FinancialSummary({ financialAnalysis }) {
   const gradientClass = getScoreBarGradient(healthScore);
 
   return (
-    <div className="w-full bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-2xl p-6 shadow-xl hover:border-slate-700/60 transition-all duration-300">
+    <div className="w-full bg-slate-950/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-white/20 transition-all duration-300">
       {/* Title & Health Score */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-2.5">

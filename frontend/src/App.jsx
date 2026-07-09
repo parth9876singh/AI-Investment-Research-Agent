@@ -8,6 +8,7 @@ import SentimentSummary from "./components/SentimentSummary.jsx";
 import CompanyOverview from "./components/CompanyOverview.jsx";
 import ResearchSkeleton from "./components/ResearchSkeleton.jsx";
 import FinancialMetricsGrid from "./components/FinancialMetricsGrid.jsx";
+import Lightfall from "./components/Lightfall.jsx";
 
 const EXAMPLE_COMPANIES = [
   { name: "Tesla", ticker: "TSLA" },
@@ -41,11 +42,33 @@ export default function App() {
   };
 
   return (
-    <div className="relative min-h-screen bg-slate-950 text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans selection:bg-indigo-500 selection:text-white">
-      {/* Decorative background glows */}
-      <div className="absolute top-0 left-1/4 w-[30rem] h-[30rem] bg-indigo-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute top-1/3 right-1/4 w-[30rem] h-[30rem] bg-purple-500/10 rounded-full blur-3xl pointer-events-none" />
-      <div className="absolute bottom-10 left-10 w-[30rem] h-[30rem] bg-teal-500/5 rounded-full blur-3xl pointer-events-none" />
+    <div className="relative min-h-screen text-slate-100 flex flex-col justify-between overflow-x-hidden font-sans selection:bg-indigo-500 selection:text-white">
+      {/* Solid background base layer (matched to user's specified backgroundColor) */}
+      <div className="fixed inset-0 -z-20 bg-[#0A29FF]" />
+
+      {/* Interactive WebGL shader backdrop rain */}
+      <div className="fixed inset-0 w-full h-full -z-10 pointer-events-none opacity-100">
+        <Lightfall
+          colors={['#A6C8FF', '#5227FF', '#FF9FFC']}
+          backgroundColor="#0A29FF"
+          speed={0.5}
+          streakCount={2}
+          streakWidth={1}
+          streakLength={1}
+          glow={1}
+          density={0.6}
+          twinkle={1}
+          zoom={3}
+          backgroundGlow={0.5}
+          opacity={1}
+          mouseInteraction={true}
+          mouseStrength={0.5}
+          mouseRadius={1}
+          color1="#A6C8FF"
+          color2="#5227FF"
+          color3="#FF9FFC"
+        />
+      </div>
 
       {/* Main Content Area */}
       <main className="flex-1 w-full max-w-7xl mx-auto px-4 py-12 md:py-16 flex flex-col items-center z-10">

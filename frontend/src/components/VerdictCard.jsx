@@ -16,7 +16,7 @@ export default function VerdictCard({ decision }) {
   // Configuration map for color schemes and badges
   const config = {
     INVEST: {
-      bg: "from-emerald-500/10 to-teal-500/5 border-emerald-500/30",
+      bg: "bg-emerald-950/30 border-emerald-500/30 backdrop-blur-xl",
       text: "text-emerald-400",
       badgeBg: "bg-emerald-500/20 text-emerald-300 border-emerald-500/40",
       shadow: "shadow-emerald-950/20 hover:shadow-emerald-500/5",
@@ -27,7 +27,7 @@ export default function VerdictCard({ decision }) {
       ),
     },
     PASS: {
-      bg: "from-rose-500/10 to-red-500/5 border-rose-500/30",
+      bg: "bg-rose-950/30 border-rose-500/30 backdrop-blur-xl",
       text: "text-rose-400",
       badgeBg: "bg-rose-500/20 text-rose-300 border-rose-500/40",
       shadow: "shadow-rose-950/20 hover:shadow-rose-500/5",
@@ -38,7 +38,7 @@ export default function VerdictCard({ decision }) {
       ),
     },
     WATCH: {
-      bg: "from-amber-500/10 to-orange-500/5 border-amber-500/30",
+      bg: "bg-amber-950/30 border-amber-500/30 backdrop-blur-xl",
       text: "text-amber-400",
       badgeBg: "bg-amber-500/20 text-amber-300 border-amber-500/40",
       shadow: "shadow-amber-950/20 hover:shadow-amber-500/5",
@@ -54,10 +54,10 @@ export default function VerdictCard({ decision }) {
   const currentConfig = config[verdict] || config.WATCH;
 
   return (
-    <div className={`w-full bg-gradient-to-br ${currentConfig.bg} border rounded-2xl p-6 md:p-8 shadow-2xl backdrop-blur-md transition-all duration-300 ${currentConfig.shadow}`}>
+    <div className={`w-full ${currentConfig.bg} border rounded-2xl p-6 md:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] transition-all duration-300 ${currentConfig.shadow}`}>
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-3">
-          <div className={`${currentConfig.text} p-2 rounded-xl bg-slate-900/50 border border-slate-800`}>
+          <div className={`${currentConfig.text} p-2 rounded-xl bg-white/5 border border-white/10`}>
             {currentConfig.icon}
           </div>
           <div>

@@ -13,7 +13,7 @@ export default function CompanyOverview({ companyOverview, businessModel }) {
   if (!companyOverview && !businessModel) return null;
 
   return (
-    <div className="w-full bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-2xl hover:border-slate-700/60 transition-all duration-300 animate-fade-in-up">
+    <div className="w-full bg-slate-950/40 border border-white/10 backdrop-blur-2xl rounded-2xl p-6 md:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-white/20 transition-all duration-300 animate-fade-in-up">
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
         
         {/* Company Overview Section */}
