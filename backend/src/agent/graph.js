@@ -4,8 +4,6 @@ import { StateGraph, START, END, Annotation } from "@langchain/langgraph";
 import { resolveCompanyNode } from "./nodes/resolveCompany.js";
 import { fetchFinancialsNode } from "./nodes/fetchFinancials.js";
 import { fetchNewsNode } from "./nodes/fetchNews.js";
-import { analyzeFinancialsNode } from "./nodes/analyzeFinancials.js";
-import { analyzeSentimentNode } from "./nodes/analyzeSentiment.js";
 import { synthesizeDecisionNode } from "./nodes/synthesizeDecision.js";
 
 /**
@@ -52,32 +50,24 @@ export const StateAnnotation = Annotation.Root({
 
 // Initialize the state graph
 const workflow = new StateGraph(StateAnnotation)
-  // Add all nodes
+  // Add all active work nodes
   .addNode("resolveCompany", resolveCompanyNode)
   .addNode("fetchFinancials", fetchFinancialsNode)
   .addNode("fetchNews", fetchNewsNode)
-  .addNode("analyzeFinancials", analyzeFinancialsNode)
-  .addNode("analyzeSentiment", analyzeSentimentNode)
   .addNode("synthesizeDecision", synthesizeDecisionNode)
 
-  // START -> resolveCompany
+  // 1. Resolve search query to ticker symbol
   .addEdge(START, "resolveCompany")
 
-  // resolveCompany -> fetchFinancials AND fetchNews (Parallel execution)
+  // 2. Fetch financials and search news articles in parallel
   .addEdge("resolveCompany", "fetchFinancials")
   .addEdge("resolveCompany", "fetchNews")
 
-  // fetchFinancials -> analyzeFinancials
-  .addEdge("fetchFinancials", "analyzeFinancials")
+  // 3. Join the data streams and compile the final decision
+  .addEdge("fetchFinancials", "synthesizeDecision")
+  .addEdge("fetchNews", "synthesizeDecision")
 
-  // fetchNews -> analyzeSentiment
-  .addEdge("fetchNews", "analyzeSentiment")
-
-  // (analyzeFinancials AND analyzeSentiment) -> synthesizeDecision (Fan-in join)
-  .addEdge("analyzeFinancials", "synthesizeDecision")
-  .addEdge("analyzeSentiment", "synthesizeDecision")
-
-  // synthesizeDecision -> END
+  // 4. Complete the process
   .addEdge("synthesizeDecision", END);
 
 // Compile the graph

@@ -69,11 +69,11 @@ export async function streamResearch(req, res) {
       { resolveCompany: { ticker: cached.ticker, companyName: cached.companyName, status: "cache_hit" } },
       { fetchFinancials: { financialData: cached.financialData } },
       { fetchNews: { newsData: cached.newsData } },
-      { analyzeFinancials: { financialAnalysis: cached.financialAnalysis } },
-      { analyzeSentiment: { sentimentAnalysis: cached.sentimentAnalysis } },
       { synthesizeDecision: { 
           companyOverview: cached.companyOverview, 
           businessModel: cached.businessModel, 
+          financialAnalysis: cached.financialAnalysis,
+          sentimentAnalysis: cached.sentimentAnalysis,
           decision: cached.decision 
       } }
     ];

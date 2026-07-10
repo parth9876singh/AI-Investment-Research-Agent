@@ -30,11 +30,11 @@ export default function FinancialSummary({ financialAnalysis }) {
   const gradientClass = getScoreBarGradient(healthScore);
 
   return (
-    <div className="w-full bg-slate-950/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-white/20 transition-all duration-300">
+    <div className="w-full glass-card p-6">
       {/* Title & Health Score */}
       <div className="flex items-center justify-between gap-4 mb-6">
         <div className="flex items-center gap-2.5">
-          <div className="p-1.5 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <div className="icon-box">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3v16.5M12 3v16.5m8.25-16.5v16.5M2.25 18H21.75" />
             </svg>
@@ -51,7 +51,7 @@ export default function FinancialSummary({ financialAnalysis }) {
       </div>
 
       {/* Visual Health Gauge Bar */}
-      <div className="w-full h-2.5 bg-slate-950/60 rounded-full mb-6 overflow-hidden border border-slate-900">
+      <div className="w-full h-2.5 bg-slate-950/60 rounded-full mb-6 overflow-hidden border border-white/10">
         <div 
           className={`h-full rounded-full bg-gradient-to-r ${gradientClass} transition-all duration-1000 ease-out`}
           style={{ width: `${healthScore * 10}%` }}
@@ -66,7 +66,7 @@ export default function FinancialSummary({ financialAnalysis }) {
       </div>
 
       {/* Grid of Strengths & Red Flags */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-slate-800/80">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-4 border-t border-white/10">
         {/* Strengths (Pros) */}
         <div>
           <h4 className="text-sm font-bold uppercase tracking-wider text-emerald-400 mb-3 flex items-center gap-1.5">

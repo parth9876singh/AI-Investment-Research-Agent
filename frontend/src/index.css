@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* ==========================================================================
+   1. GLOBAL KEYFRAMES
+   ========================================================================== */
+
 @keyframes fadeInUp {
   from {
     opacity: 0;
@@ -12,32 +16,29 @@
 }
 
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 @keyframes shimmer {
-  0% {
-    background-position: -200% 0;
-  }
-  100% {
-    background-position: 200% 0;
-  }
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
 }
 
-.animate-fade-in-up {
+/* ==========================================================================
+   2. TAILWIND V4 NATIVE UTILITY DECLARATIONS (@utility)
+   Prevents CSS specificity overlap and maps styles correctly to Tailwind v4.
+   ========================================================================== */
+
+@utility animate-fade-in-up {
   animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.animate-fade-in {
+@utility animate-fade-in {
   animation: fadeIn 0.4s ease-out forwards;
 }
 
-.animate-shimmer {
+@utility animate-shimmer {
   background: linear-gradient(
     90deg,
     rgba(30, 41, 59, 0.3) 25%,
@@ -48,8 +49,96 @@
   animation: shimmer 1.6s infinite linear;
 }
 
-/* Explicit -webkit- prefix override for iOS Safari glassmorphism support */
-.backdrop-blur-xl {
-  -webkit-backdrop-filter: blur(24px) !important;
-  backdrop-filter: blur(24px) !important;
+/* Premium Glassmorphism Card Wrapper */
+@utility glass-card {
+  background-color: rgba(2, 6, 23, 0.45); /* Dark overlay for text contrast */
+  -webkit-backdrop-filter: blur(24px); /* Safari support */
+  backdrop-filter: blur(24px); /* Frosted glass refraction */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1rem;
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+  }
+}
+
+/* Statistics Metrics Inner Items */
+@utility metric-pill {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: all 0.2s ease;
+
+  &:hover {
+    border-color: rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.08);
+  }
+}
+
+/* Search Bar Wrapper Form */
+@utility search-form {
+  position: relative;
+  display: flex;
+  align-items: center;
+  padding: 0.375rem;
+  border-radius: 1rem;
+  background-color: rgba(2, 6, 23, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  -webkit-backdrop-filter: blur(24px);
+  backdrop-filter: blur(24px);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+
+  &:focus-within {
+    border-color: rgba(99, 102, 241, 0.5);
+    box-shadow: 0 0 30px -5px rgba(99, 102, 241, 0.25);
+  }
+}
+
+/* Preset selector Button Chips */
+@utility preset-btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.75rem;
+  background-color: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgb(30, 41, 59);
+  color: rgb(148, 163, 184);
+  border-radius: 9999px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-weight: 500;
+  user-select: none;
+
+  &:hover:not(:disabled) {
+    background-color: rgba(30, 41, 59, 0.8);
+    color: rgb(129, 140, 248);
+    border-color: rgba(99, 102, 241, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &:active:not(:disabled) {
+    transform: translateY(0);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/* Standardized Icon Wrapper Shell */
+@utility icon-box {
+  padding: 0.375rem;
+  border-radius: 0.5rem;
+  background-color: rgba(99, 102, 241, 0.1);
+  color: rgb(129, 140, 248);
+  border: 1px solid rgba(99, 102, 241, 0.2);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }

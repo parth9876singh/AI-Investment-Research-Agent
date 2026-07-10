@@ -17,25 +17,19 @@ function formatNumber(num) {
  */
 function formatPercent(val) {
   if (val === null || val === undefined || isNaN(val)) return "N/A";
-  // If the value is a fraction (e.g. 0.046) convert to percentage
   const percent = Math.abs(val) < 1 ? val * 100 : val;
   return `${percent.toFixed(2)}%`;
 }
 
 /**
  * FinancialMetricsGrid Component
- * 
- * Renders a visually stunning stock dashboard grid displaying key numbers
- * and financial metrics directly so that the user can track actual data points easily.
- * 
- * @param {object} financialData - The raw financial data object containing profile and keyMetrics.
+ * Renders a stock dashboard grid displaying key numbers and valuation metrics.
  */
 export default function FinancialMetricsGrid({ financialData }) {
   if (!financialData) return null;
 
   const { profile = {}, keyMetrics = {}, symbol } = financialData;
 
-  // Retrieve values safely (handles different naming across stable FMP / LLM schemas)
   const price = profile?.price;
   const changes = profile?.changes !== undefined ? profile.changes : profile?.change;
   const changePercentage = profile?.changePercentage;
@@ -49,22 +43,20 @@ export default function FinancialMetricsGrid({ financialData }) {
   const roa = keyMetrics?.returnOnAssets;
   const debtToEquity = keyMetrics?.debtToEquity !== undefined ? keyMetrics.debtToEquity : keyMetrics?.netDebtToEBITDA;
   
-  // Valuation metrics
   const peRatio = keyMetrics?.peRatio;
   const evToSales = keyMetrics?.evToSales || keyMetrics?.priceToSalesRatio;
   const pbRatio = keyMetrics?.pbRatio || keyMetrics?.evToEBITDA;
 
-  // Determine change direction coloring
   const isPositiveChange = changes >= 0;
   const changeColor = isPositiveChange ? "text-emerald-400" : "text-rose-400";
   const changeSign = isPositiveChange ? "+" : "";
 
   return (
-    <div className="w-full bg-slate-950/40 border border-white/10 backdrop-blur-xl rounded-2xl p-6 md:p-8 shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] hover:border-white/20 transition-all duration-300 animate-fade-in-up">
+    <div className="w-full glass-card p-6 md:p-8 animate-fade-in-up">
       {/* Title */}
-      <div className="flex items-center justify-between border-b border-slate-800/60 pb-4 mb-6">
+      <div className="flex items-center justify-between border-b border-white/10 pb-4 mb-6">
         <div className="flex items-center gap-2.5">
-          <div className="p-2 rounded-lg bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+          <div className="icon-box">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-4 h-4">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 1 0 7.5 7.5h-7.5V6Z" />
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0 0 13.5 3v7.5Z" />
@@ -72,7 +64,7 @@ export default function FinancialMetricsGrid({ financialData }) {
           </div>
           <div>
             <span className="text-[10px] tracking-widest uppercase font-bold text-slate-400">Key Metrics</span>
-            <h3 className="text-base font-bold text-slate-100 tracking-tight">Stock Profile & Valuation indicators</h3>
+            <h3 className="text-base font-bold text-slate-100 tracking-tight">Stock Profile & Valuation Indicators</h3>
           </div>
         </div>
         <div className="text-right">
@@ -86,7 +78,7 @@ export default function FinancialMetricsGrid({ financialData }) {
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
         
         {/* Metric 1: Stock Price */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
+        <div className="metric-pill">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Share Price</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -101,20 +93,20 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 2: Market Cap */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
+        <div className="metric-pill">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Market Cap</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
               {formatNumber(marketCap)}
             </div>
             <div className="text-[10px] text-slate-400 mt-1 truncate">
-              {exchange || "Public exchange"}
+              {exchange || "Public Exchange"}
             </div>
           </div>
         </div>
 
         {/* Metric 3: Return on Equity (ROE) */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
+        <div className="metric-pill">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Return on Equity (ROE)</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -127,7 +119,7 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 4: Return on Assets (ROA) */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
+        <div className="metric-pill">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Return on Assets (ROA)</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -140,20 +132,20 @@ export default function FinancialMetricsGrid({ financialData }) {
         </div>
 
         {/* Metric 5: Volatility (Beta) */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
+        <div className="metric-pill">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Volatility (Beta)</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
               {beta ? beta.toFixed(2) : "N/A"}
             </div>
             <div className="text-[10px] text-slate-400 mt-1">
-              {beta > 1 ? "Higher volatility" : beta < 1 ? "Lower volatility" : "Stable market beta"}
+              {beta > 1 ? "Higher Volatility" : beta < 1 ? "Lower Volatility" : "Stable market beta"}
             </div>
           </div>
         </div>
 
         {/* Metric 6: Valuation Indicators */}
-        <div className="bg-white/5 border border-white/10 rounded-xl p-4 flex flex-col justify-between hover:border-white/20 transition-colors duration-200">
+        <div className="metric-pill">
           <span className="text-[10px] tracking-wider uppercase font-bold text-slate-400">Valuation Multiple</span>
           <div className="mt-2.5">
             <div className="text-lg md:text-xl font-extrabold text-slate-100">
@@ -169,7 +161,7 @@ export default function FinancialMetricsGrid({ financialData }) {
 
       {/* Profile Details Footer */}
       {range && industry && (
-        <div className="mt-5 pt-4 border-t border-slate-800/40 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
+        <div className="mt-5 pt-4 border-t border-white/10 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-slate-300">
           <div>
             <span className="font-bold text-slate-400 mr-1.5">52-Week Trading Range:</span>
             <span className="font-mono text-slate-200">{range}</span>

@@ -41,9 +41,6 @@ export async function synthesizeDecisionNode(state) {
   };
 
   try {
-    const model = getModel();
-    const structuredModel = model.withStructuredOutput(FullAnalysisSchema);
-
     const systemPrompt = `You are a senior investment analyst and investment committee chair.
 Your task is to analyze a target company using the provided raw financial fundamentals data and recent news articles.
 You must output a single, fully structured JSON report containing the following fields:
@@ -85,11 +82,30 @@ ${financialData ? JSON.stringify(financialData, null, 2) : "No financial data av
 --- RAW NEWS ARTICLES ---
 ${formattedNews}`;
 
-    console.log("[synthesizeDecisionNode] Calling LLM...");
-    const response = await structuredModel.invoke([
-      { role: "system", content: systemPrompt },
-      { role: "user", content: userPrompt }
-    ]);
+    let response;
+    try {
+      console.log("[synthesizeDecisionNode] Calling native primary LLM (gemini-3.5-flash)...");
+      const model = getModel();
+      const structuredModel = model.withStructuredOutput(FullAnalysisSchema);
+      response = await structuredModel.invoke([
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt }
+      ]);
+    } catch (primaryError) {
+      console.warn(`[synthesizeDecisionNode] Primary LLM failed: ${primaryError.message || primaryError}. Trying native fallback model (gemini-3.1-flash-lite)...`);
+      try {
+        const fallbackModel = getModel({ modelName: "models/gemini-3.1-flash-lite" });
+        const structuredFallback = fallbackModel.withStructuredOutput(FullAnalysisSchema);
+        response = await structuredFallback.invoke([
+          { role: "system", content: systemPrompt },
+          { role: "user", content: userPrompt }
+        ]);
+        console.log("[synthesizeDecisionNode] Fallback LLM invocation succeeded.");
+      } catch (fallbackError) {
+        console.error(`[synthesizeDecisionNode] Fallback LLM invocation also failed: ${fallbackError.message || fallbackError}`);
+        throw primaryError; // Rethrow original error to trigger fallbackResult block
+      }
+    }
 
     console.log("[synthesizeDecisionNode] Consolidated LLM analysis successfully completed.");
     

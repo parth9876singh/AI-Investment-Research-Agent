@@ -63,7 +63,7 @@ graph TD
 ### 4. Consolidated Analysis & Decision Synthesis (`synthesizeDecisionNode`)
 - Performs the **single LLM call** for the entire workflow.
 - Receives the raw financials, news snippets, and metadata.
-- Uses `ChatOpenAI` with `.withStructuredOutput(FullAnalysisSchema)` to analyze fundamentals, score financial health, determine news sentiment themes, choose a final recommendation (`INVEST`, `PASS`, or `WATCH`), and outline key factors with detailed reasoning.
+- Uses `ChatGoogleGenerativeAI` natively (for Gemini `AQ.` key) or `ChatOpenAI` (for standard `sk-` keys) with `.withStructuredOutput(FullAnalysisSchema)` to analyze fundamentals, score financial health, determine news sentiment themes, choose a final recommendation (`INVEST`, `PASS`, or `WATCH`), and outline key factors with detailed reasoning.
 
 ---
 

@@ -6,8 +6,6 @@ const STEPS = [
   { id: "resolveCompany", label: "Resolving company" },
   { id: "fetchFinancials", label: "Fetching financials" },
   { id: "fetchNews", label: "Fetching news" },
-  { id: "analyzeFinancials", label: "Analyzing financials" },
-  { id: "analyzeSentiment", label: "Analyzing sentiment" },
   { id: "synthesizeDecision", label: "Making decision" },
 ];
 
@@ -26,8 +24,6 @@ export default function LoadingSteps({ companyName, onComplete, onError }) {
     resolveCompany: "running", // First step starts running immediately
     fetchFinancials: "idle",
     fetchNews: "idle",
-    analyzeFinancials: "idle",
-    analyzeSentiment: "idle",
     synthesizeDecision: "idle",
   });
   const [errorMsg, setErrorMsg] = useState(null);
@@ -44,8 +40,6 @@ export default function LoadingSteps({ companyName, onComplete, onError }) {
       resolveCompany: "running",
       fetchFinancials: "idle",
       fetchNews: "idle",
-      analyzeFinancials: "idle",
-      analyzeSentiment: "idle",
       synthesizeDecision: "idle",
     });
 
@@ -90,21 +84,13 @@ export default function LoadingSteps({ companyName, onComplete, onError }) {
             if (nodeName === "resolveCompany") {
               next.fetchFinancials = "running";
               next.fetchNews = "running";
-            } else if (nodeName === "fetchFinancials") {
-              next.analyzeFinancials = "running";
-            } else if (nodeName === "fetchNews") {
-              next.analyzeSentiment = "running";
-            } else if (nodeName === "analyzeFinancials") {
-              if (prev.analyzeSentiment === "completed" || next.analyzeSentiment === "completed") {
+            } else if (nodeName === "fetchFinancials" || nodeName === "fetchNews") {
+              // Wait until BOTH fetchFinancials and fetchNews are completed before starting synthesizeDecision
+              const financialsDone = nodeName === "fetchFinancials" ? true : prev.fetchFinancials === "completed";
+              const newsDone = nodeName === "fetchNews" ? true : prev.fetchNews === "completed";
+              if (financialsDone && newsDone) {
                 next.synthesizeDecision = "running";
               }
-            } else if (nodeName === "analyzeSentiment") {
-              if (prev.analyzeFinancials === "completed" || next.analyzeFinancials === "completed") {
-                next.synthesizeDecision = "running";
-              }
-            } else if (nodeName === "synthesizeDecision") {
-              // Once decision is synthesized, we are fully completed.
-              // Note: es.close() and onComplete will be called when we receive the "[DONE]" message.
             }
 
             return next;
@@ -133,7 +119,7 @@ export default function LoadingSteps({ companyName, onComplete, onError }) {
   }, [companyName]);
 
   return (
-    <div className="w-full max-w-lg mx-auto bg-slate-900/40 border border-slate-800/80 backdrop-blur-md rounded-2xl p-6 md:p-8 shadow-2xl transition-all duration-300">
+    <div className="w-full max-w-lg mx-auto glass-card p-6 md:p-8">
       <div className="mb-6 text-center">
         <h3 className="text-lg font-semibold text-slate-100">AI Analyst Agent</h3>
         <p className="text-xs text-slate-400 mt-1">

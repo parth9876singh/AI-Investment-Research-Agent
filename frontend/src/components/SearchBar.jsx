@@ -24,7 +24,7 @@ export default function SearchBar({ onSearch, isLoading }) {
     <div className="w-full max-w-2xl mx-auto px-4">
       <form
         onSubmit={handleSubmit}
-        className="relative flex items-center p-1.5 rounded-2xl bg-slate-950/40 border border-white/10 backdrop-blur-xl shadow-[0_8px_32px_0_rgba(0,0,0,0.37)] focus-within:border-indigo-500/50 focus-within:shadow-[0_0_30px_-5px_rgba(99,102,241,0.2)] transition-all duration-300 ease-out group"
+        className="search-form"
       >
         {/* Search Icon */}
         <div className="pl-4 pr-2 text-slate-400 group-focus-within:text-indigo-400 transition-colors duration-200">

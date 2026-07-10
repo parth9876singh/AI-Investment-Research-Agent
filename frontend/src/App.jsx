@@ -78,7 +78,7 @@ export default function App() {
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" className="w-3.5 h-3.5">
               <path fillRule="evenodd" d="M10 2a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 2ZM5.045 4.338a.75.75 0 0 1 1.06 0l1.061 1.06A.75.75 0 1 1 6.106 6.46L5.045 5.398a.75.75 0 0 1 0-1.06Zm9.91 0a.75.75 0 0 1 0 1.06l-1.06 1.061a.75.75 0 1 1-1.061-1.06l1.06-1.06a.75.75 0 0 1 1.06 0ZM10 6a4 4 0 1 0 0 8 4 4 0 0 0 0-8Zm0 1.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5ZM2.75 10a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5A.75.75 0 0 1 2.75 10Zm12.5 0a.75.75 0 0 1 .75-.75h1.5a.75.75 0 0 1 0 1.5h-1.5a.75.75 0 0 1-.75-.75ZM5.045 15.662a.75.75 0 0 1 1.06 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06Zm9.91 0a.75.75 0 0 1 0 1.06l-1.06 1.06a.75.75 0 1 1-1.06-1.06l1.06-1.06ZM10 15a.75.75 0 0 1 .75.75v1.5a.75.75 0 0 1-1.5 0v-1.5A.75.75 0 0 1 10 15Z" clipRule="evenodd" />
             </svg>
-            Powered by LangGraph & GPT-4o-Mini
+            Powered by LangGraph & Gemini 2.5
           </div>
           <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent">
             AI Investment Research Agent
@@ -101,7 +101,7 @@ export default function App() {
                 type="button"
                 onClick={() => !isLoading && handleSearch(company.name)}
                 disabled={isLoading}
-                className="px-3 py-1.5 text-xs bg-slate-900/50 hover:bg-slate-800/80 hover:text-indigo-400 border border-slate-800 hover:border-indigo-500/30 text-slate-400 rounded-full cursor-pointer transition-all duration-200 hover:-translate-y-0.5 active:translate-y-0 disabled:opacity-40 disabled:cursor-not-allowed font-medium select-none"
+                className="preset-btn"
               >
                 {company.name} <span className="text-[10px] text-slate-600 font-mono font-bold">({company.ticker})</span>
               </button>
@@ -186,14 +186,13 @@ export default function App() {
       </main>
 
       {/* Footer / Disclaimer */}
-      <footer className="w-full border-t border-slate-900 bg-slate-950/80 backdrop-blur-sm py-6 text-center text-xs text-slate-500 px-4 z-10">
+      <footer className="w-full border-t border-white/10 bg-slate-950/50 backdrop-blur-md py-6 text-center text-xs text-slate-500 px-4 z-10">
         <p className="max-w-2xl mx-auto leading-relaxed">
           © {new Date().getFullYear()} AI Investment Analyst. All rights reserved.
         </p>
         <p className="max-w-2xl mx-auto mt-1 text-slate-600 uppercase tracking-widest font-semibold text-[10px]">
           Disclaimer: This is not financial advice. For educational purposes only.
-          <p>Test</p>
-        </p>
+         </p>
       </footer>
     </div>
   );

@@ -1,8 +1,13 @@
 import React, { useEffect, useRef } from 'react';
 import { Renderer, Program, Mesh, Triangle } from 'ogl';
 
+// Maximum supported color stops in our shader
 const MAX_COLORS = 8;
 
+/**
+ * Converts hex color strings (e.g., "#5227FF") into RGB fractional arrays ([0.32, 0.15, 1.0]).
+ * Necessary because WebGL shaders process color channels as floats between 0 and 1.
+ */
 const hexToRGB = hex => {
   const c = hex.replace('#', '').padEnd(6, '0');
   const r = parseInt(c.slice(0, 2), 16) / 255;
@@ -11,11 +16,19 @@ const hexToRGB = hex => {
   return [r, g, b];
 };
 
+/**
+ * Prepares color palettes for WebGL uniforms.
+ * Returns an array of RGB float values for each color index and calculates their average.
+ */
 const prepColors = input => {
   const base = (input && input.length ? input : ['#A6C8FF', '#5227FF', '#FF9FFC']).slice(0, MAX_COLORS);
   const count = base.length;
   const arr = [];
-  for (let i = 0; i < MAX_COLORS; i++) arr.push(hexToRGB(base[Math.min(i, base.length - 1)]));
+  
+  for (let i = 0; i < MAX_COLORS; i++) {
+    arr.push(hexToRGB(base[Math.min(i, base.length - 1)]));
+  }
+  
   const avg = [0, 0, 0];
   for (let i = 0; i < count; i++) {
     avg[0] += arr[i][0];
@@ -25,9 +38,14 @@ const prepColors = input => {
   avg[0] /= count;
   avg[1] /= count;
   avg[2] /= count;
+  
   return { arr, count, avg };
 };
 
+/**
+ * Vertex Shader
+ * Maps the 2D plane coordinates to full screen bounds.
+ */
 const vertex = `
 attribute vec2 position;
 attribute vec2 uv;
@@ -38,12 +56,13 @@ void main() {
 }
 `;
 
+/**
+ * Fragment Shader
+ * Written in GLSL. Runs on the GPU for every single pixel to draw 
+ * the animated lightfall rain, twinkling streaks, and cursor glows.
+ */
 const fragment = `
-#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
-#else
-precision mediump float;
-#endif
 
 uniform vec3  iResolution;
 uniform vec2  iMouse;
@@ -77,6 +96,7 @@ uniform float uMouseRadius;
 
 varying vec2 vUv;
 
+// Utility to resolve color stops dynamically inside the shader
 vec3 palette(float h) {
   int count = uColorCount;
   if (count < 1) count = 1;
@@ -96,6 +116,7 @@ vec3 tanhv(vec3 x) {
   return (1.0 - e) / (1.0 + e);
 }
 
+// Ray-march calculations to generate curved light streaks
 vec2 sceneC(vec2 frag, vec2 r) {
   vec2 P = (frag + frag - r) / r.x;
   float z = 0.0;
@@ -130,6 +151,7 @@ void mainImage(out vec4 o, vec2 C) {
   vec2 P = vec2(2.0, 1.0) * uv0 - (r / r.x) * vec2(0.0, 1.0);
   vec4 O = vec4(uBgColor * 90.0 * uBgGlow / (1e3 * dot(P, P) + 6.0), 0.0);
 
+  // Mouse cursor hover glow interaction
   float mGlow = 0.0;
   if (uMouseEnabled > 0.5) {
     vec2 mN = (iMouse + iMouse - r) / r.x;
@@ -142,8 +164,9 @@ void mainImage(out vec4 o, vec2 C) {
   vec2 rr = vec2(max(length(fw), 1e-5));
   float tail = 19.0 / max(uStreakLength, 0.05);
 
+  // Draw light streaks based on density and index parameters
   for (int m = 0; m < 16; m++) {
-    float activeStreak = step(float(m), float(uStreakCount) - 0.5);
+    if (m >= uStreakCount) break;
     float jf = float(m) + 1.0;
     float ic = fract(sin(dot(vec2(jf, floor(C.x / Y.x + 0.5)), vec2(7.0, 11.0)) * 73.0));
     vec2 Pp = C - (T + T * ic) * vec2(0.0, 1.0);
@@ -154,7 +177,7 @@ void mainImage(out vec4 o, vec2 C) {
     weight *= (1.0 + mGlow * 2.0);
     vec2 inner = vec2(length(max(Pp, vec2(-1.0, 0.0))), length(Pp) - zr) - zr;
     vec2 sm = vec2(1.0) - smoothstep(-rr, rr, inner);
-    O.rgb += dot(sm, vec2(exp(tail * Pp.y), 3.0)) * col * weight * activeStreak;
+    O.rgb += dot(sm, vec2(exp(tail * Pp.y), 3.0)) * col * weight;
     C.x += Y.x / 8.0;
   }
 
@@ -169,6 +192,10 @@ void main() {
 }
 `;
 
+/**
+ * Lightfall component. Sets up the WebGL canvas, compiles the shaders,
+ * handles window resizing, and loops frame renders dynamically.
+ */
 const Lightfall = ({
   className,
   dpr,
@@ -204,6 +231,7 @@ const Lightfall = ({
     const container = containerRef.current;
     if (!container) return;
 
+    // 1. Initialize OGL WebGL Renderer context
     const renderer = new Renderer({
       dpr: dpr ?? (typeof window !== 'undefined' ? window.devicePixelRatio || 1 : 1),
       alpha: true,
@@ -218,8 +246,10 @@ const Lightfall = ({
     canvas.style.display = 'block';
     container.appendChild(canvas);
 
+    // 2. Format hex strings to RGB floats
     const { arr, count, avg } = prepColors(colors);
 
+    // 3. Define WebGL variables (Uniforms) mapped to React properties
     const uniforms = {
       iResolution: { value: [gl.drawingBufferWidth, gl.drawingBufferHeight, 1] },
       iMouse: { value: [0, 0] },
@@ -250,19 +280,20 @@ const Lightfall = ({
       uMouseRadius: { value: mouseRadius }
     };
 
+    // 4. Compile the GLSL Shaders on the GPU
     const program = new Program(gl, { vertex, fragment, uniforms });
     programRef.current = program;
 
+    // 5. Create a simple Triangle mesh that covers the whole screen coordinates
     const geometry = new Triangle(gl);
     geometryRef.current = geometry;
     const mesh = new Mesh(gl, { geometry, program });
     meshRef.current = mesh;
 
+    // 6. Handle Canvas bounds resizing
     const resize = () => {
       const rect = container.getBoundingClientRect();
-      const width = Math.max(1, rect.width);
-      const height = Math.max(1, rect.height);
-      renderer.setSize(width, height);
+      renderer.setSize(rect.width, rect.height);
       uniforms.iResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight, 1];
     };
 
@@ -270,6 +301,7 @@ const Lightfall = ({
     const ro = new ResizeObserver(resize);
     ro.observe(container);
 
+    // 7. Handle Cursor movements
     const onPointerMove = e => {
       const rect = canvas.getBoundingClientRect();
       const scale = renderer.dpr || 1;
@@ -284,9 +316,12 @@ const Lightfall = ({
       canvas.addEventListener('pointermove', onPointerMove);
     }
 
+    // 8. Animation tick loop (Runs every frame)
     const loop = t => {
       rafRef.current = requestAnimationFrame(loop);
       uniforms.iTime.value = t * 0.001;
+      
+      // Apply smooth mouse movement easing
       if (mouseDampening > 0) {
         if (!lastTimeRef.current) lastTimeRef.current = t;
         const dt = (t - lastTimeRef.current) / 1000;
@@ -301,6 +336,8 @@ const Lightfall = ({
       } else {
         lastTimeRef.current = t;
       }
+      
+      // Render the compiled WebGL scene
       if (!paused && programRef.current && meshRef.current) {
         try {
           renderer.render({ scene: meshRef.current });
@@ -311,6 +348,7 @@ const Lightfall = ({
     };
     rafRef.current = requestAnimationFrame(loop);
 
+    // Cleanup WebGL resources on component unmount
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       if (mouseInteraction) canvas.removeEventListener('pointermove', onPointerMove);
@@ -318,15 +356,18 @@ const Lightfall = ({
       if (canvas.parentElement === container) {
         container.removeChild(canvas);
       }
+      
       const callIfFn = (obj, key) => {
         if (obj && typeof obj[key] === 'function') {
           obj[key].call(obj);
         }
       };
+      
       callIfFn(programRef.current, 'remove');
       callIfFn(geometryRef.current, 'remove');
       callIfFn(meshRef.current, 'remove');
       callIfFn(rendererRef.current, 'destroy');
+      
       programRef.current = null;
       geometryRef.current = null;
       meshRef.current = null;

@@ -1,28 +1,36 @@
 import { ChatOpenAI } from "@langchain/openai";
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 
 /**
- * Helper to initialize the ChatOpenAI client.
- * Automatically detects if the API key is a Google Gemini key (starts with "AQ.")
- * and configures the correct baseURL and model to avoid authentication and routing errors.
+ * Helper to initialize the LangChain model client.
+ * Automatically detects if the API key is a Google Gemini key (starts with "AQ." or "AIzaSy")
+ * and initializes the native ChatGoogleGenerativeAI client, otherwise defaults to standard ChatOpenAI.
  * 
  * @param {object} options - Optional overrides.
- * @returns {ChatOpenAI} Configured LangChain model instance.
+ * @returns {object} Configured LangChain model instance.
  */
 export function getModel(options = {}) {
   const apiKey = process.env.OPENAI_API_KEY;
 
   if (apiKey && (apiKey.startsWith("AQ.") || apiKey.startsWith("AIzaSy"))) {
-    console.log("[getModel] Gemini API key detected (AQ./AIza prefix). Re-routing to Google Gemini compatibility endpoint.");
+    console.log("[getModel] Gemini API key detected (AQ./AIza prefix). Initializing native ChatGoogleGenerativeAI client...");
     
-    return new ChatOpenAI({
+    // Destructure model overrides if passed.
+    // Note: ChatGoogleGenerativeAI uses 'model' instead of 'modelName'.
+    const { modelName, model, ...rest } = options;
+    let selectedModel = modelName || model || "gemini-3.5-flash";
+    
+    // Strip "models/" prefix if present since the native Google SDK handles bare model names
+    if (selectedModel.startsWith("models/")) {
+      selectedModel = selectedModel.replace("models/", "");
+    }
+    
+    return new ChatGoogleGenerativeAI({
       apiKey,
-      modelName: "models/gemini-3.5-flash", // Replaces gpt-4o-mini for Gemini API calls
+      model: selectedModel,
       temperature: 0,
       maxRetries: 2,
-      configuration: {
-        baseURL: "https://generativelanguage.googleapis.com/v1beta/openai/",
-      },
-      ...options,
+      ...rest,
     });
   }
 
