@@ -47,3 +47,9 @@
   background-size: 200% 100%;
   animation: shimmer 1.6s infinite linear;
 }
+
+/* Explicit -webkit- prefix override for iOS Safari glassmorphism support */
+.backdrop-blur-xl {
+  -webkit-backdrop-filter: blur(24px) !important;
+  backdrop-filter: blur(24px) !important;
+}

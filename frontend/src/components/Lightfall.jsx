@@ -39,7 +39,11 @@ void main() {
 `;
 
 const fragment = `
+#ifdef GL_FRAGMENT_PRECISION_HIGH
 precision highp float;
+#else
+precision mediump float;
+#endif
 
 uniform vec3  iResolution;
 uniform vec2  iMouse;
@@ -139,7 +143,7 @@ void mainImage(out vec4 o, vec2 C) {
   float tail = 19.0 / max(uStreakLength, 0.05);
 
   for (int m = 0; m < 16; m++) {
-    if (m >= uStreakCount) break;
+    float activeStreak = step(float(m), float(uStreakCount) - 0.5);
     float jf = float(m) + 1.0;
     float ic = fract(sin(dot(vec2(jf, floor(C.x / Y.x + 0.5)), vec2(7.0, 11.0)) * 73.0));
     vec2 Pp = C - (T + T * ic) * vec2(0.0, 1.0);
@@ -150,7 +154,7 @@ void mainImage(out vec4 o, vec2 C) {
     weight *= (1.0 + mGlow * 2.0);
     vec2 inner = vec2(length(max(Pp, vec2(-1.0, 0.0))), length(Pp) - zr) - zr;
     vec2 sm = vec2(1.0) - smoothstep(-rr, rr, inner);
-    O.rgb += dot(sm, vec2(exp(tail * Pp.y), 3.0)) * col * weight;
+    O.rgb += dot(sm, vec2(exp(tail * Pp.y), 3.0)) * col * weight * activeStreak;
     C.x += Y.x / 8.0;
   }
 
@@ -256,7 +260,9 @@ const Lightfall = ({
 
     const resize = () => {
       const rect = container.getBoundingClientRect();
-      renderer.setSize(rect.width, rect.height);
+      const width = Math.max(1, rect.width);
+      const height = Math.max(1, rect.height);
+      renderer.setSize(width, height);
       uniforms.iResolution.value = [gl.drawingBufferWidth, gl.drawingBufferHeight, 1];
     };
 
