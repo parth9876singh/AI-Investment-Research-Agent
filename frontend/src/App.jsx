@@ -192,6 +192,7 @@ export default function App() {
         </p>
         <p className="max-w-2xl mx-auto mt-1 text-slate-600 uppercase tracking-widest font-semibold text-[10px]">
           Disclaimer: This is not financial advice. For educational purposes only.
+          <p>Test</p>
         </p>
       </footer>
     </div>
