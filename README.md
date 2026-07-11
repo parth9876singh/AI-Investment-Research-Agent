@@ -158,7 +158,7 @@ FINNHUB_API_KEY=your_finnhub_key
 ```bash
 cd backend
 npm install
-npm run dev
+npm run  
 ```
 
 ### 2. Start the Frontend
